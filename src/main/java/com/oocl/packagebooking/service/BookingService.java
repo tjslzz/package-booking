@@ -1,10 +1,12 @@
 package com.oocl.packagebooking.service;
 
 import com.oocl.packagebooking.entity.Booking;
+import com.oocl.packagebooking.exception.BookingException;
 import com.oocl.packagebooking.repo.BookingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -22,19 +24,23 @@ public class BookingService {
         return bookingRepo.findAll();
     }
 
-    public String book(String id, String date) {
+    public List<Booking> book(String id, String date) throws Exception {
         try{
-            Booking booking = bookingRepo.findById(id).orElse(null);
-            booking.setTime(date);
-            booking.setState("已预约");
-            bookingRepo.save(booking);
-            return "预约成功";
+            Integer number = Integer.valueOf(date.substring(11,13));
+            if(number >= 9 && number <= 20){
+                Booking booking = bookingRepo.findById(id).orElse(null);
+                booking.setTime(date);
+                booking.setState("已预约");
+                bookingRepo.save(booking);
+            }
+            return bookingRepo.findAll();
         }
-        catch (Exception e){}
-        return "预约失败";
+        catch (Exception e){
+            throw new BookingException("很酷的异常！");
+        }
     }
 
-    public List<Booking> fetch(String id) {
+    public List<Booking> fetch(String id) throws Exception {
         try{
             Booking booking = bookingRepo.findById(id).orElse(null);
             booking.setState("已取件");
@@ -42,7 +48,8 @@ public class BookingService {
             bookingRepo.save(booking);
             return bookingRepo.findAll();
         }
-        catch (Exception e){}
-        return null;
+        catch (Exception e){
+            throw new BookingException("很酷的异常！");
+        }
     }
 }

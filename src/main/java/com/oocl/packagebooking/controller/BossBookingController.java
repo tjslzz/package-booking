@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/boss")
+@CrossOrigin(origins = { "http://localhost:8081", "http://localhost:8888" }, maxAge = 6000)
 public class BossBookingController {
 
     @Autowired
     private BookingService bookingService;
-
 
     @GetMapping
     public List<Booking> getAllBooking(){
