@@ -24,9 +24,4 @@ public class BossBookingController {
     public List<Booking> getAllBooking(@RequestBody Booking booking){
         return bookingService.addBooking(booking);
     }
-
-    @PutMapping("/id/{id}")
-    public List<Booking> putAllBooking(@PathVariable("id") String id){
-        return bookingService.fetch(id);
-    }
 }
